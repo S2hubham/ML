@@ -1,0 +1,624 @@
+Applying Linear Regression:
+Objective: The code aims to predict the annual average temperature (ANNUAL) using the year (YEAR).
+Data:
+Independent Variable (x): YEAR (the year of the data points)
+Dependent Variable (y): ANNUAL (the annual average temperature in Celsius)
+
+python
+Copy code
+x = df['YEAR']
+y = df["ANNUAL"]
+Model: A Linear Regression model is trained to find a linear relationship between YEAR and ANNUAL.
+python
+Copy code
+regressor = LinearRegression()
+regressor.fit(x.values.reshape(-1, 1), y)
+The regressor.fit() function fits the model using the year values as the input (independent variable) and the annual temperatures as the output (dependent variable).
+
+2. Model Coefficients:
+The slope and intercept of the regression line are printed. These represent the model's equation in the form:
+\Temperature=(Slope×Year)+Intercept
+
+python
+Copy code
+print("Slope:", regressor.coef_)
+print("Intercept:", regressor.intercept_)
+3. Making Predictions:
+The model predicts the annual temperatures (predicted) for the given years in the dataset using the trained regression model.
+
+python
+Copy code
+predicted = regressor.predict(x.values.reshape(-1, 1))
+4. Evaluating the Model:
+Performance Metrics: The code evaluates the model using three common metrics:
+Mean Absolute Error (MAE): Measures the average of the absolute errors (the absolute difference between predicted and actual temperatures).
+Mean Squared Error (MSE): Measures the average of the squared differences between predicted and actual temperatures. It penalizes larger errors more than MAE.
+R-Squared (R²): Represents the proportion of variance in the dependent variable that is explained by the model. A higher R² value indicates a better fit of the model to the data.
+python
+Copy code
+print("Mean Absolute Error (MAE):", mean_absolute_error(y, predicted))
+print("Mean Squared Error (MSE):", mean_squared_error(y, predicted))
+print("R-Squared:", r2_score(y, predicted))
+5. Visualization:
+Scatter Plot: It creates a scatter plot to visualize the actual relationship between year and temperature (Actual Data).
+python
+Copy code
+plt.scatter(x, y)
+Regression Line: The predicted values are plotted as a regression line (Predicted Data) over the scatter plot, showing the model's linear approximation.
+python
+Copy code
+plt.plot(x, predicted, label='Predicted', color='g')
+Seaborn Regression Plot: A regression plot using Seaborn is also plotted for better visualization of the data and model.
+python
+Copy code
+sns.regplot(x='YEAR', y='ANNUAL', data=df)
+
+
+Answer to the Assignment Question:
+a) Apply Linear Regression: The code applies linear regression using sklearn.linear_model.LinearRegression() and predicts the annual average temperature based on the year.
+
+b) Assess Performance: The code uses the Mean Absolute Error (MAE), Mean Squared Error (MSE), and R-Squared to evaluate the model's performance. These metrics help determine how well the model predicts the actual temperature.
+
+c) Visualize the Model: The code visualizes the actual vs. predicted temperatures using a scatter plot and regression line. It also uses Seaborn's regplot to show the best-fit line.
+
+Key Concepts:
+Linear Regression: A method to predict the dependent variable based on the independent variable assuming a linear relationship.
+Performance Metrics:
+MAE: Low values indicate good predictions.
+MSE: Low values indicate better model performance, but larger errors are penalized more than MAE.
+R²: A value closer to 1 means the model fits the data well.
+Visualization: Helps in understanding the relationship between variables and checking if the model fits well to the data.
+
+
+
+
+QUESTIONS : 
+1.What is the purpose of using Linear Regression in this task?
+Answer: The purpose of using Linear Regression is to find a linear relationship between the year (YEAR) and the annual average temperature (ANNUAL). This helps in predicting future temperatures based on historical data.
+2. Why are we using mean_absolute_error, mean_squared_error, and r2_score as evaluation metrics?
+Answer:
+Mean Absolute Error (MAE): Measures the average magnitude of errors in predictions, without considering their direction. It is useful for understanding the average prediction error.
+Mean Squared Error (MSE): Similar to MAE but squares the error, which gives more weight to larger errors. It's used to penalize larger deviations from the actual values.
+R-Squared (R²): Represents how well the regression model fits the data. A higher R² indicates that the model explains a larger portion of the variance in the dependent variable.
+3. How do you interpret the slope and intercept of the regression model?
+Answer:
+Slope: Indicates how much the temperature changes for each additional year. For example, if the slope is positive, it means the temperature increases as the year progresses.
+Intercept: The temperature value when the year is 0 (although this might not have any practical meaning, depending on the dataset).
+4. What does the R-Squared value tell you about the model's performance?
+Answer: R-Squared indicates the proportion of variance in the dependent variable (temperature) that is explained by the model. An R² value closer to 1 means the model explains most of the variance, while a value closer to 0 suggests that the model does not explain much of the variance.
+5. What is the difference between MAE and MSE?
+Answer:
+MAE is the average of the absolute differences between predicted and actual values, providing a direct sense of average error size.
+MSE is the average of the squared differences, which penalizes larger errors more than MAE. MSE is sensitive to outliers, making it useful when large errors are particularly undesirable.
+6. What do the scatter plot and regression line show in the visualization?
+Answer:
+The scatter plot shows the actual data points (years vs. annual temperatures), helping us visualize the distribution and trend.
+The regression line represents the predicted relationship between year and temperature based on the linear regression model. It shows the best-fit line that minimizes the error between actual and predicted values.
+7. Why is the regressor.fit() function used in this code?
+Answer: The regressor.fit() function is used to train the linear regression model by fitting it to the data. It calculates the best-fitting line (slope and intercept) based on the relationship between YEAR and ANNUAL.
+8. Why do we reshape the x values using x.values.reshape(-1, 1)?
+Answer: The x values need to be reshaped into a 2D array with one column and multiple rows because the LinearRegression model in scikit-learn expects a 2D array for the independent variable. The -1 allows automatic calculation of the appropriate number of rows.
+9. What is the significance of using sns.regplot() in the visualization?
+Answer: The sns.regplot() function from Seaborn plots both the scatter plot of the data and the best-fit regression line. It provides a clear visual representation of how well the linear regression model fits the data and is more visually appealing and informative compared to using only matplotlib.
+10. What is the impact of using Linear Regression on time-series data like temperature data?
+Answer: While Linear Regression can be used to predict trends in time-series data (like temperature over the years), it assumes a linear relationship and does not take into account temporal dependencies (e.g., seasonality, trends). For better accuracy in time-series predictions, more complex models like ARIMA or other time-series forecasting techniques might be needed.
+11. What would happen if you tried to predict with years outside of the given dataset (e.g., future years)?
+Answer: Predicting with years outside the dataset (extrapolation) can be risky because the linear model is trained on existing data, and there's no guarantee that the same linear trend will hold true in the future. This could lead to inaccurate or unrealistic predictions.
+12. How can you improve the model if the R-Squared value is low?
+Answer: If the R-Squared value is low, it suggests that the model is not explaining much of the variance in the dependent variable. Possible improvements include:
+Adding more relevant features or variables.
+Trying a more complex model (e.g., polynomial regression, decision trees).
+Removing outliers or errors in the data.
+Applying feature engineering techniques.
+13. What are the potential limitations of using Linear Regression for this dataset?
+Answer:
+Assumption of Linearity: Linear regression assumes that the relationship between the independent and dependent variables is linear, which may not always be true for real-world data.
+Outliers: The model is sensitive to outliers, which can disproportionately affect the regression line.
+No consideration of time dependencies: For time-series data, models like ARIMA or LSTM networks might be more appropriate because they capture the temporal aspects (seasonality, trends).
+14. What is the next step if you get poor performance metrics (high MSE, low R²)?
+Answer: If the model has poor performance, you can:
+Try transforming the data (e.g., log transformation for skewed data).
+Investigate if more features are needed to improve the model.
+Try a different regression model (e.g., Ridge or Lasso regression).
+Check for data quality issues such as missing values or outliers.
+
+
+
+
+------------------------------------------------
+Theory on Linear Regression
+Linear regression is one of the simplest and most widely used statistical methods for predictive modeling. It is a supervised learning technique used to model the relationship between a dependent variable (target variable) and one or more independent variables (predictor variables) by fitting a linear equation to the observed data.
+
+Linear regression can be classified into two types:
+
+Simple Linear Regression: Involves a single independent variable.
+Multiple Linear Regression: Involves multiple independent variables.
+Mathematical Formulation
+The general form of a linear regression model is:
+
+Simple Linear Regression:
+For a single independent variable 
+𝑋
+X, the linear regression model is expressed as:
+
+𝑌
+=
+𝛽
+0
++
+𝛽
+1
+𝑋
++
+𝜖
+Y=β 
+0
+​
+ +β 
+1
+​
+ X+ϵ
+Where:
+
+𝑌
+Y = Dependent variable (target).
+𝑋
+X = Independent variable (predictor).
+𝛽
+0
+β 
+0
+​
+  = Intercept term (constant).
+𝛽
+1
+β 
+1
+​
+  = Slope of the line (coefficient of 
+𝑋
+X).
+𝜖
+ϵ = Error term (residual), representing the difference between the predicted and actual values.
+Multiple Linear Regression:
+For multiple independent variables 
+𝑋
+1
+,
+𝑋
+2
+,
+…
+,
+𝑋
+𝑛
+X 
+1
+​
+ ,X 
+2
+​
+ ,…,X 
+n
+​
+ , the model is expressed as:
+
+𝑌
+=
+𝛽
+0
++
+𝛽
+1
+𝑋
+1
++
+𝛽
+2
+𝑋
+2
++
+⋯
++
+𝛽
+𝑛
+𝑋
+𝑛
++
+𝜖
+Y=β 
+0
+​
+ +β 
+1
+​
+ X 
+1
+​
+ +β 
+2
+​
+ X 
+2
+​
+ +⋯+β 
+n
+​
+ X 
+n
+​
+ +ϵ
+Where:
+
+𝑌
+Y = Dependent variable (target).
+𝑋
+1
+,
+𝑋
+2
+,
+…
+,
+𝑋
+𝑛
+X 
+1
+​
+ ,X 
+2
+​
+ ,…,X 
+n
+​
+  = Independent variables (predictors).
+𝛽
+0
+β 
+0
+​
+  = Intercept.
+𝛽
+1
+,
+𝛽
+2
+,
+…
+,
+𝛽
+𝑛
+β 
+1
+​
+ ,β 
+2
+​
+ ,…,β 
+n
+​
+  = Coefficients (slopes) for each independent variable.
+𝜖
+ϵ = Error term.
+Objective of Linear Regression
+The objective of linear regression is to find the best-fitting line (or hyperplane in the case of multiple variables) that minimizes the residual sum of squares (RSS) or error. The residuals represent the difference between the actual data points and the values predicted by the linear model.
+
+The RSS is given by:
+
+𝑅
+𝑆
+𝑆
+=
+∑
+𝑖
+=
+1
+𝑛
+(
+𝑌
+𝑖
+−
+𝑌
+𝑖
+^
+)
+2
+RSS= 
+i=1
+∑
+n
+​
+ (Y 
+i
+​
+ − 
+Y 
+i
+​
+ 
+^
+​
+ ) 
+2
+ 
+Where:
+
+𝑌
+𝑖
+Y 
+i
+​
+  = Actual value of the dependent variable.
+𝑌
+𝑖
+^
+Y 
+i
+​
+ 
+^
+​
+  = Predicted value of the dependent variable.
+The goal is to minimize the RSS by adjusting the coefficients (
+𝛽
+0
+,
+𝛽
+1
+,
+…
+,
+𝛽
+𝑛
+β 
+0
+​
+ ,β 
+1
+​
+ ,…,β 
+n
+​
+ ) to get the best-fitting model.
+
+Ordinary Least Squares (OLS)
+To find the optimal values for the coefficients, linear regression uses Ordinary Least Squares (OLS), which minimizes the residual sum of squares by calculating the derivatives of the RSS with respect to the coefficients and setting them to zero. The result is a system of linear equations that can be solved for the coefficients.
+
+For simple linear regression, the formula for the slope 
+𝛽
+1
+β 
+1
+​
+  and intercept 
+𝛽
+0
+β 
+0
+​
+  is given by:
+
+𝛽
+1
+=
+𝑛
+∑
+𝑋
+𝑌
+−
+∑
+𝑋
+∑
+𝑌
+𝑛
+∑
+𝑋
+2
+−
+(
+∑
+𝑋
+)
+2
+β 
+1
+​
+ = 
+n∑X 
+2
+ −(∑X) 
+2
+ 
+n∑XY−∑X∑Y
+​
+ 
+𝛽
+0
+=
+∑
+𝑌
+−
+𝛽
+1
+∑
+𝑋
+𝑛
+β 
+0
+​
+ = 
+n
+∑Y−β 
+1
+​
+ ∑X
+​
+ 
+Where:
+
+𝑋
+X = Independent variable.
+𝑌
+Y = Dependent variable.
+𝑛
+n = Number of data points.
+For multiple linear regression, matrix algebra is used to calculate the coefficients:
+
+𝛽
+=
+(
+𝑋
+𝑇
+𝑋
+)
+−
+1
+𝑋
+𝑇
+𝑌
+β=(X 
+T
+ X) 
+−1
+ X 
+T
+ Y
+Where:
+
+𝑋
+X is the matrix of independent variables.
+𝑌
+Y is the vector of dependent variable values.
+𝛽
+β is the vector of coefficients (including the intercept).
+Assumptions of Linear Regression
+For the linear regression model to provide reliable predictions, several assumptions must hold:
+
+Linearity: The relationship between the independent and dependent variables is linear.
+Independence: The residuals (errors) are independent of each other.
+Homoscedasticity: The variance of residuals is constant across all values of the independent variable(s).
+Normality: The residuals are normally distributed.
+No multicollinearity: In multiple linear regression, the independent variables should not be highly correlated with each other.
+Evaluation Metrics for Linear Regression
+To assess the performance of a linear regression model, several evaluation metrics are used:
+
+Mean Squared Error (MSE): Measures the average squared difference between the actual and predicted values.
+𝑀
+𝑆
+𝐸
+=
+1
+𝑛
+∑
+𝑖
+=
+1
+𝑛
+(
+𝑌
+𝑖
+−
+𝑌
+𝑖
+^
+)
+2
+MSE= 
+n
+1
+​
+  
+i=1
+∑
+n
+​
+ (Y 
+i
+​
+ − 
+Y 
+i
+​
+ 
+^
+​
+ ) 
+2
+ 
+Root Mean Squared Error (RMSE): The square root of MSE, providing the error in the same unit as the dependent variable.
+𝑅
+𝑀
+𝑆
+𝐸
+=
+𝑀
+𝑆
+𝐸
+RMSE= 
+MSE
+​
+ 
+R-squared (
+𝑅
+2
+R 
+2
+ ): Measures the proportion of the variance in the dependent variable that is predictable from the independent variables.
+𝑅
+2
+=
+1
+−
+𝑅
+𝑆
+𝑆
+𝑇
+𝑆
+𝑆
+R 
+2
+ =1− 
+TSS
+RSS
+​
+ 
+Where 
+𝑇
+𝑆
+𝑆
+TSS is the total sum of squares (variance of the dependent variable).
+
+Adjusted R-squared: Adjusted version of 
+𝑅
+2
+R 
+2
+  that takes into account the number of predictors in the model. It helps to prevent overfitting when adding unnecessary features.
+Advantages of Linear Regression
+Simplicity: Linear regression is easy to understand and interpret, making it an excellent starting point for predictive modeling.
+Fast Training: The algorithm runs quickly, even on large datasets, due to its simplicity.
+Transparency: The results from linear regression provide insights into the relationships between variables.
+Scalability: Linear regression can be used for large datasets and works well with continuous variables.
+Disadvantages of Linear Regression
+Linearity Assumption: Linear regression assumes a linear relationship between the independent and dependent variables, which may not always be the case.
+Sensitivity to Outliers: Linear regression is sensitive to outliers, which can significantly affect the performance of the model.
+Overfitting: In the case of multiple predictors, linear regression can overfit if there is multicollinearity or too many variables.
+Assumption of Normality: The assumption that errors are normally distributed may not always hold in practice.
+Applications of Linear Regression
+Predictive Modeling: Linear regression is widely used in various fields such as finance (e.g., predicting stock prices), economics (e.g., predicting demand), and healthcare (e.g., predicting patient outcomes).
+Trend Analysis: It can be used to find trends in data over time.
+Market Research: Linear regression models help understand the relationship between advertising spend and sales.
+Risk Assessment: It is used to assess risks in fields such as insurance and banking.
+Conclusion
+Linear regression is a foundational machine learning and statistical method that is widely used for predictive modeling. Its simplicity and efficiency make it an excellent choice for understanding relationships between variables and making predictions. However, it is important to carefully check the underlying assumptions of linear regression and to evaluate its performance with appropriate metrics to ensure reliable and meaningful results.
+
+
+
+
+
+
+
+
+
+
+

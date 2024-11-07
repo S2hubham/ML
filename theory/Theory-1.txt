@@ -1,0 +1,163 @@
+Dataset Information and Initial Setup
+python
+Copy code
+import os
+os.getcwd()
+import pandas as pd
+df = pd.read_csv("Heart.csv")
+Get Current Working Directory: os.getcwd() helps ensure the dataset’s path is correct by showing where the script is running.
+Load the Dataset: Using pd.read_csv("Heart.csv"), the heart disease dataset is loaded into a DataFrame, df, for easy manipulation and analysis.
+Part A: Basic Data Exploration and Preparation
+Shape of Data:
+
+python
+Copy code
+df.shape
+This command returns a tuple representing the dimensions of the dataset: (rows, columns).
+
+Finding Missing Values:
+
+python
+Copy code
+df.isnull()
+df.isnull().sum()
+df.isnull() returns a DataFrame of the same shape as df, with True for missing values.
+df.isnull().sum() counts the number of missing values in each column. Handling missing data is essential to ensure accurate model training.
+Data Types of Each Column:
+
+python
+Copy code
+df.dtypes
+This command shows the data type for each column, e.g., int64, float64, object. Knowing data types helps in identifying any transformations that might be needed, such as encoding categorical data.
+
+Finding Zeros:
+
+python
+Copy code
+df == 0
+df[df == 0]
+df[df == 0].count()
+df == 0 returns a DataFrame of True values where the dataset has zeros.
+df[df == 0].count() provides the count of zeros in each column, which can help identify columns where zero might indicate missing or placeholder values.
+Mean Age of Patients:
+
+python
+Copy code
+df["Age"].mean()
+This calculates the mean age of the patients in the dataset, which can offer insights into the age distribution.
+
+Part B: Selecting Specific Columns and Splitting Data
+Extracting Columns:
+
+python
+Copy code
+df[['Age', 'Sex', 'ChestPain', 'RestBP', 'Chol']]
+newdf = df[['Age', 'Sex', 'ChestPain', 'RestBP', 'Chol']]
+Here, only specific columns (Age, Sex, ChestPain, RestBP, Chol) are selected, creating a new DataFrame, newdf, for focused analysis.
+
+Splitting Dataset into Train and Test Sets:
+
+python
+Copy code
+from sklearn.model_selection import train_test_split
+train, test = train_test_split(df, random_state=0, test_size=0.25)
+train_test_split divides df into train and test subsets.
+random_state=0 ensures reproducibility of results.
+test_size=0.25 allocates 25% of the data to testing and 75% to training, which is a typical split ratio.
+Part C: Confusion Matrix and Classification Metrics for COVID Diagnosis Example
+Defining Actual and Predicted Labels:
+
+python
+Copy code
+import numpy as np 
+actual = list(np.ones(45)) + list(np.zeros(55))
+predicted = list(np.ones(40)) + list(np.zeros(52)) + list(np.ones(8))
+actual represents the ground truth: 45 COVID-positive cases (1s) and 55 COVID-negative cases (0s).
+predicted represents model predictions: it predicts 40 cases as positive, 52 as negative, and 8 incorrectly as positive.
+Confusion Matrix Visualization:
+
+python
+Copy code
+from sklearn.metrics import ConfusionMatrixDisplay
+ConfusionMatrixDisplay.from_predictions(actual, predicted)
+This generates a confusion matrix to visualize the model's performance.
+The confusion matrix displays counts for:
+True Positives (TP): Correct positive predictions.
+True Negatives (TN): Correct negative predictions.
+False Positives (FP): Incorrect positive predictions.
+False Negatives (FN): Incorrect negative predictions.
+Classification Metrics:
+
+python
+Copy code
+from sklearn.metrics import classification_report
+print(classification_report)
+print(classification_report(actual, predicted))
+The classification_report provides:
+
+Accuracy: Proportion of correct predictions out of total samples.
+Accuracy = TP+TN  / TP+TN+FP+FN
+
+Precision: Proportion of true positives out of predicted positives.
+Precision = 𝑇𝑃 / 𝑇𝑃+𝐹𝑃
+ 
+Recall (Sensitivity): Proportion of true positives out of actual positives.
+Recall = 𝑇𝑃 / TP+FN
+​ 
+F1 Score: Harmonic mean of precision and recall, balancing both metrics.
+𝐹1 = 2 × ((Precision × Recall) / (Precision + Recall))
+ 
+These metrics help evaluate the model's performance, especially in scenarios with imbalanced datasets, where accuracy alone may be misleading.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Data preparation here includes:
+
+Loading the dataset.
+Checking shape, data types, and missing values.
+Finding and counting zeros as potential placeholders.
+Calculating the mean age.
+Selecting key columns (Age, Sex, ChestPain, RestBP, Chol).
+Splitting the data into training (75%) and testing (25%) sets.
+
+
+Shape of the Dataset:
+The shape tells us how many rows and columns the dataset has. It’s important for understanding dataset size and ensuring it’s suitable for analysis.
+
+Handling Missing Values:
+Missing values can cause issues in analysis and modeling, so we check for them to decide whether to remove, fill, or impute.
+
+Knowing Data Types:
+Data types (e.g., integer, float, string) tell us how data is stored. Knowing them helps ensure the data is correctly formatted for calculations.
+
+Checking for Zeros:
+Zeros might represent missing or default data. Identifying them helps decide if they need to be treated as missing values.
+
+Calculating Mean Age:
+The mean age gives a quick sense of the age distribution, which can help understand the dataset’s demographics.
+
+Feature Selection:
+Selecting Age, Sex, ChestPain, RestBP, and Chol focuses the analysis on the most relevant columns, simplifying the model and making it easier to interpret.
+
+Data Splitting:
+Splitting into training and testing sets allows the model to learn on one part of the data and be evaluated on unseen data to check its performance.
+
+Confusion Matrix:
+A confusion matrix shows counts of true positives, true negatives, false positives, and false negatives, summarizing prediction results.
+
+Accuracy, Precision, Recall, F1 Score:
+Accuracy: Correct predictions out of all predictions.
+Precision: True positives out of predicted positives.
+Recall: True positives out of actual positives.
+F1 Score: Balance between precision and recall, useful when classes are imbalanced.
+
+Dealing with Imbalanced Classes:
+In cases like COVID prediction with imbalanced data, precision and recall are more reliable than accuracy for assessing model performance.
+Accuracy: It measures the proportion of all correct predictions (both positive and negative) out of all predictions. However, in imbalanced datasets (e.g., many negative cases, few positive cases), a model that predicts the majority class most of the time can still have high accuracy but perform poorly for the minority class (e.g., predicting COVID-positive cases).
+
+Precision: It measures the proportion of correctly predicted positive cases (true positives) out of all predicted positive cases (true positives + false positives). In imbalanced data, this helps identify how well the model avoids falsely predicting COVID-positive when the person is not actually positive.
+
+Recall: It measures the proportion of actual positive cases (true positives) that the model correctly predicted (true positives + false negatives). This is important because, in imbalanced data, we want to minimize the number of false negatives (i.e., missing actual COVID-positive cases).
+
+
